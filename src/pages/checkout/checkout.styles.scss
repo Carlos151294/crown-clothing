@@ -28,4 +28,19 @@
     margin-left: auto;
     font-size: 36px;
   }
+
+  button {
+    margin-left: auto;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .strip-test-example {
+    font-size: 2rem;
+    color: red;
+    margin: 2rem 0;
+    text-align: center;
+  }
 }
