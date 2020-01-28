@@ -21,6 +21,9 @@
     position: absolute;
     top: 255px;
     transition: .2s all;
+    
+    display: flex;
+    justify-content: center;
   }
 
   &:hover {
