@@ -23,10 +23,12 @@ const Header = ({ currentUser, hidden }) => (
       <Logo />
     </LogoContainer>
     <OptionsContainer>
-      <OptionLink to='/shop'>
-        SHOP
-      </OptionLink>
-      <OptionLink to='/shop'>
+      {currentUser &&
+        <OptionLink to='/shop'>
+          SHOP
+        </OptionLink>
+      }
+      <OptionLink to='/contact'>
         CONTACT
       </OptionLink>
       {currentUser ? (
@@ -34,11 +36,11 @@ const Header = ({ currentUser, hidden }) => (
           SIGN OUT
         </OptionLink>
       ) : (
-        <OptionLink to='/signin'>
-          SIGN IN
-        </OptionLink>
-      )}
-      <CartIcon />
+          <OptionLink to='/'>
+            SIGN IN
+          </OptionLink>
+        )}
+      {currentUser && <CartIcon />}
     </OptionsContainer>
     {hidden ? null : <CartDropdown />}
   </HeaderContainer>
