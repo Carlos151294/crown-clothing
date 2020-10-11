@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import './App.scss';
@@ -11,10 +12,16 @@ import CheckoutPage from './pages/checkout/checkout.component';
 import ContactPage from './pages/contact/contact.component';
 
 import { selectCurrentUser } from './redux/user/user.selectors';
-import { useSelector } from 'react-redux';
+import { checkUserSession } from './redux/user/user.actions';
 
 const App = () => {
   const currentUser = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkUserSession());
+    // eslint-disable-next-line
+  }, []);
    
   return (
     <div>
