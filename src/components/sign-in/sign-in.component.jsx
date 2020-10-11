@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import CustumButton from '../custom-button/custom-button.component';
 
-import { signInWithGoogle, auth } from '../../firebase/firebase.utils';
+import { auth } from '../../firebase/firebase.utils';
+import { googleSignInStart } from '../../redux/user/user.actions'
 
 import './sign-in.styles.scss';
 
 const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -42,7 +45,7 @@ const SignIn = () => {
 
                 <div className="buttons">
                     <CustumButton type="submit">Sign in</CustumButton>
-                    <CustumButton type="button" onClick={signInWithGoogle} isGoogleSignIn>
+                    <CustumButton type="button" onClick={() => dispatch(googleSignInStart())} isGoogleSignIn>
                         Sign in with Google
                     </CustumButton>
                 </div>
