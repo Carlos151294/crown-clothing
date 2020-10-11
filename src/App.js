@@ -16,7 +16,7 @@ import { selectCurrentUser } from './redux/user/user.selectors';
 
 const App = (props) => {
   const { currentUser } = props;
-  
+   
   return (
     <div>
       <Header />
