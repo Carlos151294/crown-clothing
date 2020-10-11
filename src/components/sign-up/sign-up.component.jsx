@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
+import { signUpStart } from '../../redux/user/user.actions';
 
 import './sign-up.styles.scss';
 
 const SignUp = () => {
-    const [userData, setUserData] = useState({ displayName: '', email: '', password: '', confirmPassword: ''});
+    const [userData, setUserData] = useState({ displayName: '', email: '', password: '', confirmPassword: '' });
     const { displayName, email, password, confirmPassword } = userData;
+    const dispatch = useDispatch();
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -19,13 +21,8 @@ const SignUp = () => {
             return;
         }
 
-        try {
-            const { user } = await auth.createUserWithEmailAndPassword(email, password);
-
-            await createUserProfileDocument(user, { displayName });
-        } catch(e) {
-            console.error(e);
-        }
+        dispatch(signUpStart({ displayName, email, password }));
+        setUserData({ displayName: '', email: '', password: '', confirmPassword: '' });
     }
 
     const handleChange = event => {
@@ -41,7 +38,7 @@ const SignUp = () => {
             <span>Sign up with your email and password</span>
 
             <form className="sign-up-form" onSubmit={handleSubmit}>
-                <FormInput 
+                <FormInput
                     type="text"
                     name="displayName"
                     value={displayName}
@@ -49,7 +46,7 @@ const SignUp = () => {
                     label='Display Name'
                     required
                 />
-                <FormInput 
+                <FormInput
                     type="email"
                     name="email"
                     value={email}
@@ -57,7 +54,7 @@ const SignUp = () => {
                     label='Email'
                     required
                 />
-                <FormInput 
+                <FormInput
                     type="password"
                     name="password"
                     value={password}
@@ -65,7 +62,7 @@ const SignUp = () => {
                     label='Password'
                     required
                 />
-                <FormInput 
+                <FormInput
                     type="password"
                     name="confirmPassword"
                     value={confirmPassword}
