@@ -10,42 +10,51 @@ import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import CheckoutPage from './pages/checkout/checkout.component';
 import ContactPage from './pages/contact/contact.component';
+import { SpinnerContainer, SpinnerOverlay } from './components/with-spinner/with-spinner.styles';
 
-import { selectCurrentUser } from './redux/user/user.selectors';
+import { selectCurrentUser, selectUserLoading } from './redux/user/user.selectors';
 import { checkUserSession } from './redux/user/user.actions';
 
 const App = () => {
   const currentUser = useSelector(selectCurrentUser);
+  const loading = useSelector(selectUserLoading)
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(checkUserSession());
     // eslint-disable-next-line
   }, []);
-   
+
   return (
     <div>
       <Header />
-      <Switch>
-        <Route
-          exact
-          path='/'
-          render={() =>
-            currentUser ? (<HomePage />) : (<SignInAndSignUpPage />)
-          }
-        />
-        <Route
-          path='/shop'
-          render={({ match }) => currentUser ? (<ShopPage match={match} />) : (<Redirect to='/' />)}
-        />
-        <Route path='/contact' component={ContactPage} />
-        <Route
-          path='/checkout'
-          render={() =>
-            currentUser ? (<CheckoutPage />) : (<Redirect to='/' />)
-          }
-        />
-      </Switch>
+      {loading &&
+        <SpinnerOverlay>
+            <SpinnerContainer />
+        </SpinnerOverlay>
+      }
+      {!loading &&
+        <Switch>
+          <Route
+            exact
+            path='/'
+            render={() =>
+              currentUser ? (<HomePage />) : (<SignInAndSignUpPage />)
+            }
+          />
+          <Route
+            path='/shop'
+            render={({ match }) => currentUser ? (<ShopPage match={match} />) : (<Redirect to='/' />)}
+          />
+          <Route path='/contact' component={ContactPage} />
+          <Route
+            path='/checkout'
+            render={() =>
+              currentUser ? (<CheckoutPage />) : (<Redirect to='/' />)
+            }
+          />
+        </Switch>
+      }
     </div>
   );
 }
