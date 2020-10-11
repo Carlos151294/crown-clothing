@@ -4,8 +4,7 @@ import { useDispatch } from 'react-redux';
 import FormInput from '../form-input/form-input.component';
 import CustumButton from '../custom-button/custom-button.component';
 
-import { auth } from '../../firebase/firebase.utils';
-import { googleSignInStart } from '../../redux/user/user.actions'
+import { googleSignInStart, emailSignInStart } from '../../redux/user/user.actions'
 
 import './sign-in.styles.scss';
 
@@ -16,12 +15,7 @@ const SignIn = () => {
 
     const handleSubmit = async event => {
         event.preventDefault();
-
-        try {
-            await auth.signInWithEmailAndPassword(email, password);
-        } catch (e) {
-            console.error(e);
-        }
+        dispatch(emailSignInStart({email, password}));
     };
 
     return (

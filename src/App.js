@@ -1,7 +1,5 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 
 import './App.scss';
 
@@ -13,9 +11,10 @@ import CheckoutPage from './pages/checkout/checkout.component';
 import ContactPage from './pages/contact/contact.component';
 
 import { selectCurrentUser } from './redux/user/user.selectors';
+import { useSelector } from 'react-redux';
 
-const App = (props) => {
-  const { currentUser } = props;
+const App = () => {
+  const currentUser = useSelector(selectCurrentUser);
    
   return (
     <div>
@@ -44,8 +43,4 @@ const App = (props) => {
   );
 }
 
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
-});
-
-export default connect(mapStateToProps)(App);
+export default App;
