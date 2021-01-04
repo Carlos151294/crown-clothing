@@ -37,7 +37,7 @@ export function* signInWithEmail({ payload: { email, password } }) {
         const { user } = yield auth.signInWithEmailAndPassword(email, password);
         yield getSnapshotFromUserAuth(user);
     } catch (error) {
-        put(signInFailure(error));
+        yield put(signInFailure(error));
     }
 }
 
@@ -111,6 +111,6 @@ export function* userSagas() {
         call(onCheckUserSession),
         call(onSignOutStart),
         call(onSignUpStart),
-        call(onSignUpSuccess)
+        takeLatest(UserActionTypes.SIGN_UP_SUCCESS, signInAfterSignUp)
     ]);
 }

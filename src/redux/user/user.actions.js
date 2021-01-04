@@ -36,8 +36,9 @@ export const signOutFailure = (error) => ({
     payload: error
 });
 
-export const loadingUserData = () => ({
-    type: UserActionTypes.LOADING_USER_DATA
+export const loadingUserData = (loading) => ({
+    type: UserActionTypes.LOADING_USER_DATA,
+    payload: loading
 });
 
 export const signUpStart = (credentials) => ({
