@@ -1,18 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
-import HomePage from './pages/homepage/homepage.component';
-import ShopPage from './pages/shoppage/shop.component';
 import Header from './components/header/header.component';
-import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-import CheckoutPage from './pages/checkout/checkout.component';
-import ContactPage from './pages/contact/contact.component';
-import { SpinnerContainer, SpinnerOverlay } from './components/with-spinner/with-spinner.styles';
+import Spinner from './components/spinner/spinner.component';
+
 import { selectCurrentUser, selectUserLoading } from './redux/user/user.selectors';
 import { checkUserSession } from './redux/user/user.actions';
 
 import { GlobalStyle } from './global.styles';
+
+const HomePage = lazy(() => import('./pages/homepage/homepage.component'));
+const ShopPage = lazy(() => import('./pages/shoppage/shop.component'));
+const SignInAndSignUpPage = lazy(() => import('./pages/sign-in-and-sign-up/sign-in-and-sign-up.component'));
+const CheckoutPage = lazy(() => import('./pages/checkout/checkout.component'));
+const ContactPage = lazy(() => import('./pages/contact/contact.component'));
 
 const App = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -29,30 +31,32 @@ const App = () => {
       <GlobalStyle />
       <Header />
       {loading &&
-        <SpinnerOverlay>
-            <SpinnerContainer />
-        </SpinnerOverlay>
+        <Spinner />
       }
       {!loading &&
         <Switch>
-          <Route
-            exact
-            path='/'
-            render={() =>
-              currentUser ? (<HomePage />) : (<SignInAndSignUpPage />)
-            }
-          />
-          <Route
-            path='/shop'
-            render={({ match }) => currentUser ? (<ShopPage match={match} />) : (<Redirect to='/' />)}
-          />
-          <Route path='/contact' component={ContactPage} />
-          <Route
-            path='/checkout'
-            render={() =>
-              currentUser ? (<CheckoutPage />) : (<Redirect to='/' />)
-            }
-          />
+          <Suspense fallback={
+              <Spinner />
+            }>
+            <Route
+              exact
+              path='/'
+              render={() =>
+                currentUser ? (<HomePage />) : (<SignInAndSignUpPage />)
+              }
+            />
+            <Route
+              path='/shop'
+              render={({ match }) => currentUser ? (<ShopPage match={match} />) : (<Redirect to='/' />)}
+            />
+            <Route path='/contact' component={ContactPage} />
+            <Route
+              path='/checkout'
+              render={() =>
+                currentUser ? (<CheckoutPage />) : (<Redirect to='/' />)
+              }
+            />
+          </Suspense>
         </Switch>
       }
     </div>
