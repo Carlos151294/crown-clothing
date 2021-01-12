@@ -61,8 +61,15 @@ export const CustomButtonContainer = styled.button`
 
     display: flex;
     justify-content: center;
+    align-items: center;
 
     ${getButtonStyles}
+
+    @media screen and (max-width: 800px) {
+        min-width: unset;
+        padding: 0 20px;
+        line-height: unset;
+    }
 
     &:focus {
         outline: none;
