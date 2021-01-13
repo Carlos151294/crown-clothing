@@ -4,6 +4,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Header from './components/header/header.component';
 import Spinner from './components/spinner/spinner.component';
+import ErrorBoundary from './components/error-boundary/error-boundary.component';
 
 import { selectCurrentUser, selectUserLoading } from './redux/user/user.selectors';
 import { checkUserSession } from './redux/user/user.actions';
@@ -35,28 +36,28 @@ const App = () => {
       }
       {!loading &&
         <Switch>
-          <Suspense fallback={
-              <Spinner />
-            }>
-            <Route
-              exact
-              path='/'
-              render={() =>
-                currentUser ? (<HomePage />) : (<SignInAndSignUpPage />)
-              }
-            />
-            <Route
-              path='/shop'
-              render={({ match }) => currentUser ? (<ShopPage match={match} />) : (<Redirect to='/' />)}
-            />
-            <Route path='/contact' component={ContactPage} />
-            <Route
-              path='/checkout'
-              render={() =>
-                currentUser ? (<CheckoutPage />) : (<Redirect to='/' />)
-              }
-            />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<Spinner />}>
+              <Route
+                exact
+                path='/'
+                render={() =>
+                  currentUser ? (<HomePage />) : (<SignInAndSignUpPage />)
+                }
+                />
+              <Route
+                path='/shop'
+                render={({ match }) => currentUser ? (<ShopPage match={match} />) : (<Redirect to='/' />)}
+                />
+              <Route path='/contact' component={ContactPage} />
+              <Route
+                path='/checkout'
+                render={() =>
+                  currentUser ? (<CheckoutPage />) : (<Redirect to='/' />)
+                }
+                />
+            </Suspense>
+          </ErrorBoundary>
         </Switch>
       }
     </div>
